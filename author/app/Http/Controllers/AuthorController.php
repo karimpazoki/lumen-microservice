@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Models\Author;
+use App\Traits\ResponseBuilder;
 
 class AuthorController extends Controller
 {
+    use ResponseBuilder;
     /**
      * Create a new controller instance.
      *
@@ -23,7 +27,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        # code...
+        return $this->success(Author::all());
     }
 
     /**
@@ -35,7 +39,7 @@ class AuthorController extends Controller
      */
     public function show($author)
     {
-        # code...
+        return $this->success(Author::findOrFail($author));
     }
 
     /**
@@ -47,7 +51,7 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        # code...
+        return $this->success(Author::create($request->all()), "The author created successfully", Response::HTTP_CREATED);
     }
 
     /**
@@ -60,7 +64,10 @@ class AuthorController extends Controller
      */
     public function update(Request $request, $author)
     {
-        # code...
+        $author = Author::findOrFail($author);
+        $author->fill($request->all());
+        $author->save();
+        return $this->success($author, "The author updated successfully", Response::HTTP_OK);
     }
 
     /**
@@ -72,6 +79,9 @@ class AuthorController extends Controller
      */
     public function delete($author)
     {
-        # code...
+        $author = Author::findOrFail($author);
+        $author->delete();
+        return $author;
+        return $this->success($author, "The author deleted successfully", Response::HTTP_OK);
     }
 }
