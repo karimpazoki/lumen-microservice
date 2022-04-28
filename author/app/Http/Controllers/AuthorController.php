@@ -51,6 +51,12 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'name' => 'required|string|max:255',
+            'gender' => 'required|string|in:male,female',
+            'country' => 'required|string|max:255'
+        ]);
+
         return $this->success(Author::create($request->all()), "The author created successfully", Response::HTTP_CREATED);
     }
 
@@ -64,6 +70,12 @@ class AuthorController extends Controller
      */
     public function update(Request $request, $author)
     {
+        $this->validate($request,[
+            'name' => 'string|max:255',
+            'gender' => 'string|in:male,female',
+            'country' => 'string|max:255'
+        ]);
+
         $author = Author::findOrFail($author);
         $author->fill($request->all());
         $author->save();
