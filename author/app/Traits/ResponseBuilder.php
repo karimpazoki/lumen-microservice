@@ -8,19 +8,18 @@ trait ResponseBuilder
 {
     public function success($data, $message = "success",  $code = Response::HTTP_OK)
     {
-        return [
+        return response([
             'code' => $code,
             'data' => $data,
             'message' => $message,
-        ];
+        ], $code);
     }
 
-    public function error($data, $message = "success",  $code = Response::HTTP_OK)
+    public function error($message,  $code)
     {
-        return [
+        return response([
             'code' => $code,
-            'error' => $data,
             'message' => $message,
-        ];
+        ], $code);
     }
 }
